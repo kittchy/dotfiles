@@ -2,9 +2,21 @@ version: "3"
 
 tasks:
   darwin-switch:
-    desc: Build and switch nix-darwin configuration
+    desc: Build and switch nix-darwin configuration (macOS only)
+    platforms: [darwin]
     cmds:
       - sudo nix run nix-darwin -- switch --flake ./nix#kiuchitakahirononotobukkukonpyuta
+
+  home-switch:
+    desc: Build and switch home-manager configuration (Linux only)
+    platforms: [linux]
+    cmds:
+      - nix run home-manager/master -- switch --flake ./nix#kittchy
+
+  switch:
+    desc: Build and switch configuration (auto-detect platform)
+    cmds:
+      - task: '{{if eq OS "darwin"}}darwin-switch{{else}}home-switch{{end}}'
 
   update:
     desc: Update flake.lock

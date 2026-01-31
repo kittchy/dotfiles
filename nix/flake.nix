@@ -26,18 +26,79 @@
     }:
 
     let
-      hostname = "kiuchitakahirononotobukkukonpyuta";
-      username = "kiuchitakahiro";
-      system = "aarch64-darwin";
-      homedir = "/Users/${username}";
-      pkgs = import nixpkgs {
-        inherit system;
+      # ========================================
+      # macOS Configuration
+      # ========================================
+      darwinHostname = "kiuchitakahirononotobukkukonpyuta";
+      darwinUsername = "kiuchitakahiro";
+      darwinSystem = "aarch64-darwin";
+      darwinHomedir = "/Users/${darwinUsername}";
+      darwinPkgs = import nixpkgs { system = darwinSystem; };
+
+      # ========================================
+      # Linux (Ubuntu) Configuration
+      # ========================================
+      linuxUsername = "kittchy";
+      linuxSystem = "x86_64-linux";
+      linuxHomedir = "/home/${linuxUsername}";
+      linuxPkgs = import nixpkgs { system = linuxSystem; };
+
+      # ========================================
+      # Shared Home Manager Configuration
+      # ========================================
+      sharedHomeConfig = pkgs: username: homedir: {
+        home = {
+          stateVersion = "25.05";
+          inherit username;
+          homeDirectory = homedir;
+          packages = [
+            # Nix tools
+            pkgs.nixfmt-classic
+            pkgs.statix
+
+            # Shell tools
+            pkgs.mise
+            pkgs.sheldon
+            pkgs.starship
+
+            # Rust toolchain
+            pkgs.cargo
+            pkgs.rustc
+            pkgs.rust-analyzer
+            pkgs.clippy
+
+            # CLI tools (shared across platforms)
+            pkgs.fzf
+            pkgs.fd
+            pkgs.ripgrep
+            pkgs.jq
+            pkgs.htop
+            pkgs.tree
+            pkgs.wget
+            pkgs.git
+            pkgs.gh
+            pkgs.lazygit
+            pkgs.tmux
+            pkgs.neovim
+            pkgs.chezmoi
+          ];
+        };
+
+        programs.zsh = {
+          enable = true;
+          initExtra = builtins.readFile ./init.zsh;
+        };
       };
+
     in
     {
+      # ========================================
+      # macOS (nix-darwin) Configuration
+      # ========================================
       darwinConfigurations = {
-        "${hostname}" = nix-darwin.lib.darwinSystem {
-          inherit system pkgs;
+        "${darwinHostname}" = nix-darwin.lib.darwinSystem {
+          system = darwinSystem;
+          pkgs = darwinPkgs;
 
           modules = [
             {
@@ -45,89 +106,75 @@
               system = {
                 stateVersion = 5;
                 defaults.controlcenter.BatteryShowPercentage = true;
-                primaryUser = "kiuchitakahiro";
+                primaryUser = darwinUsername;
               };
 
-              # Define user home directory for nix-darwin
-              users.users."${username}" = {
-                home = homedir;
+              users.users."${darwinUsername}" = {
+                home = darwinHomedir;
               };
 
               homebrew = {
                 enable = true;
-                # TODO: nix packageに移行
-                # 移行したらhomebrew から削除
+                # macOS-only packages via Homebrew
                 brews = [
-                  "awscli" # AWS Command Line Interface
-                  "bakks/bakks/butterfish" # LLM統合シェルツール (AI支援コマンドライン)
-                  "bastet" # 意地悪なテトリスゲーム (最悪のブロックを選ぶAI)
-                  "chezmoi" # dotfiles管理ツール
-                  "cmake" # クロスプラットフォームビルドシステム
-                  "cocoapods" # Swift/Objective-C依存関係管理
-                  "cryptography" # Python暗号化ライブラリ
-                  "devcontainer" # VS Code Dev Containers CLI
-                  "docker" # コンテナプラットフォーム
-                  "docker-compose" # Docker複数コンテナ管理
-                  "docker-credential-helper" # Docker認証情報ヘルパー
-                  "duf" # ディスク使用量表示ツール (df/duの改良版)
-                  "fd" # find代替高速ファイル検索
-                  "ffind" # ファイル検索ツール
-                  "ffmpeg" # 動画/音声変換ツール
-                  "fish" # フレンドリーな対話型シェル
-                  "fzf" # コマンドラインファジーファインダー
-                  "gcc" # GNU Compiler Collection
-                  "gemini-cli" # Google Gemini CLI (AI支援ターミナルツール)
-                  "gh" # GitHub CLI
-                  "ghostscript" # PostScript/PDFインタープリタ
-                  "git" # 分散バージョン管理システム
-                  "git-secrets" # 機密情報検出ツール
-                  "go-task/tap/go-task" # タスクランナー (Makefileの代替)
-                  "hashicorp/tap/terraform" # Infrastructure as Code
-                  "htop" # インタラクティブなプロセスビューア
-                  "hugo" # 静的サイトジェネレーター
-                  "imagemagick" # 画像処理ツール
-                  "jq" # JSON処理コマンドラインツール
-                  "k9s" # Kubernetes TUI (ターミナルUI)
-                  "kdoctor" # Kotlin Multiplatform環境診断ツール
-                  "kind" # Kubernetes in Docker (ローカルK8sクラスタ)
-                  "kubernetes-cli" # kubectl (Kubernetesコマンドラインツール)
-                  "lazydocker" # Docker TUI (ターミナルUI)
-                  "lazygit" # Git TUI (ターミナルUI)
-                  "libsixel" # sixelグラフィックライブラリ
-                  "llvm" # LLVMコンパイラインフラストラクチャ
-                  "mongocli" # MongoDB CLI
-                  "mongodb-atlas-cli" # MongoDB Atlas CLI
-                  "mongodb/brew/mongodb-community" # MongoDBデータベース
-                  "mongodb/brew/mongodb-community-shell" # MongoDB Shell
-                  "neofetch" # システム情報表示ツール
-                  "nload" # ネットワーク帯域幅リアルタイムモニター
-                  "nsnake" # ターミナルスネークゲーム
-                  "nvm" # Node.jsバージョン管理
-                  "pigz" # 並列gzip (高速圧縮)
-                  "pipx" # Pythonアプリケーション隔離実行
-                  "pkgconf" # pkg-config実装
-                  "pv" # パイプビューア (進捗表示)
-                  "qmk/qmk/qmk" # QMKキーボードファームウェア開発ツール
-                  "samtay/tui/tetris" # ターミナルテトリスゲーム
-                  "shellcheck" # シェルスクリプト静的解析
-                  "sox" # 音声処理ツール
-                  "speedtest-cli" # インターネット回線速度測定
-                  "svg2png" # SVGからPNG変換ツール
-                  "switchaudio-osx" # macOS音声出力切り替え
-                  "tmux" # ターミナルマルチプレクサ
-                  "tnk-studio/tools/lazykube" # Kubernetes TUI (マウス操作対応)
-                  "tree" # ディレクトリツリー表示
-                  "tty-clock" # ターミナル時計
-                  "twty" # Twitter CLIクライアント
-                  "watch" # コマンド定期実行
-                  "wget" # ファイルダウンロードツール
-                  "wireguard-tools" # WireGuard VPNツール
-                  "yarn" # JavaScriptパッケージマネージャー
-                  "yazi" # ターミナルファイルマネージャー
-                  "youplot" # ターミナルデータプロット/可視化
-                  "zellij" # Rustベースターミナルマルチプレクサ
-                  "zlib" # 圧縮ライブラリ
-                  "neovim" # neovim
+                  "awscli"
+                  "bakks/bakks/butterfish"
+                  "bastet"
+                  "cmake"
+                  "cocoapods"
+                  "cryptography"
+                  "devcontainer"
+                  "docker"
+                  "docker-compose"
+                  "docker-credential-helper"
+                  "duf"
+                  "ffind"
+                  "ffmpeg"
+                  "fish"
+                  "gcc"
+                  "gemini-cli"
+                  "ghostscript"
+                  "git-secrets"
+                  "go-task/tap/go-task"
+                  "hashicorp/tap/terraform"
+                  "hugo"
+                  "imagemagick"
+                  "k9s"
+                  "kdoctor"
+                  "kind"
+                  "kubernetes-cli"
+                  "lazydocker"
+                  "libsixel"
+                  "llvm"
+                  "mongocli"
+                  "mongodb-atlas-cli"
+                  "mongodb/brew/mongodb-community"
+                  "mongodb/brew/mongodb-community-shell"
+                  "neofetch"
+                  "nload"
+                  "nsnake"
+                  "nvm"
+                  "pigz"
+                  "pipx"
+                  "pkgconf"
+                  "pv"
+                  "qmk/qmk/qmk"
+                  "samtay/tui/tetris"
+                  "shellcheck"
+                  "sox"
+                  "speedtest-cli"
+                  "svg2png"
+                  "switchaudio-osx"
+                  "tnk-studio/tools/lazykube"
+                  "tty-clock"
+                  "twty"
+                  "watch"
+                  "wireguard-tools"
+                  "yarn"
+                  "yazi"
+                  "youplot"
+                  "zellij"
+                  "zlib"
                 ];
                 casks = [
                   "1password"
@@ -153,7 +200,6 @@
                   "via"
                   "vpn-by-google-one"
                   "wezterm"
-                  "google-cloud-sdk"
                 ];
               };
             }
@@ -162,34 +208,69 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                users."${username}" = {
-                  home = {
-                    stateVersion = "25.05";
-                    inherit username;
-                    homeDirectory = homedir;
-                    packages = [
-                      # TODO: 徐々にhomebrewからnix packageに移行
-                      pkgs.nixfmt
-                      pkgs.statix
-                      pkgs.mise
-                      pkgs.sheldon
-                      pkgs.starship
-
-                      # Rust 環境の追加
-                      pkgs.cargo
-                      pkgs.rustc
-                      pkgs.rust-analyzer # エディタ補完用（推奨）
-                      pkgs.clippy # Linter（推奨）
-
-                    ];
-                  };
-
-                  programs.zsh = {
-                    enable = true;
-                    initExtra = builtins.readFile ./init.zsh;
-                  };
-                };
+                users."${darwinUsername}" = sharedHomeConfig darwinPkgs darwinUsername darwinHomedir;
               };
+            }
+          ];
+        };
+      };
+
+      # ========================================
+      # Linux (Home Manager Standalone) Configuration
+      # ========================================
+      homeConfigurations = {
+        "${linuxUsername}" = home-manager.lib.homeManagerConfiguration {
+          pkgs = linuxPkgs;
+
+          modules = [
+            {
+              home = {
+                stateVersion = "25.05";
+                username = linuxUsername;
+                homeDirectory = linuxHomedir;
+                packages = [
+                  # Nix tools
+                  linuxPkgs.nixfmt-classic
+                  linuxPkgs.statix
+
+                  # Shell tools
+                  linuxPkgs.mise
+                  linuxPkgs.sheldon
+                  linuxPkgs.starship
+
+                  # Rust toolchain
+                  linuxPkgs.cargo
+                  linuxPkgs.rustc
+                  linuxPkgs.rust-analyzer
+                  linuxPkgs.clippy
+
+                  # CLI tools
+                  linuxPkgs.fzf
+                  linuxPkgs.fd
+                  linuxPkgs.ripgrep
+                  linuxPkgs.jq
+                  linuxPkgs.htop
+                  linuxPkgs.tree
+                  linuxPkgs.wget
+                  linuxPkgs.git
+                  linuxPkgs.gh
+                  linuxPkgs.lazygit
+                  linuxPkgs.tmux
+                  linuxPkgs.neovim
+                  linuxPkgs.chezmoi
+
+                  # Linux-only tools
+                  linuxPkgs.xclip
+                ];
+              };
+
+              programs.zsh = {
+                enable = true;
+                initExtra = builtins.readFile ./init.zsh;
+              };
+
+              # Required for standalone home-manager
+              programs.home-manager.enable = true;
             }
           ];
         };
