@@ -1,0 +1,48 @@
+-- since this is just an example spec, don't actually load anything here and return an empty spec
+-- stylua: ignore
+return {}
+-- return {
+--     -- flutter
+--     {
+--         "akinsho/flutter-tools.nvim",
+--         event = "VeryLazy",
+-- dependencies = {
+--             "nvim-lua/plenary.nvim",
+--             "stevearc/dressing.nvim",
+--         },
+--         keys = {
+--             {
+--                 "<leader>0",
+--                 function() require("telescope").extensions.flutter.commands() end,
+--                 desc = "Open command Flutter"
+--             },
+--             {
+--                 "<leader>r",
+--                 "<cmd>FlutterReload<CR>",
+--                 desc = "Flutter Reload",
+--                 silent = true,
+--                 mode = "n",
+--             },
+--             {
+--                 "<leader>R",
+--                 "<cmd>FlutterRestart<CR>",
+--                 desc = "Flutter Restart",
+--                 silent = true,
+--                 mode = "n",
+--             },
+--         },
+--         config = true,
+--         opts ={
+--             ui = {
+--                 border = "none",
+--             },
+--             dev_log = {
+--                 enabled = false,
+--             },
+--             debugger = {
+--                 enabled = true,
+--                 run_via_dap = true,
+--             },
+--         }
+--     },
+-- }

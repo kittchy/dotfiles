@@ -1,0 +1,25 @@
+name: CI
+
+on: [push]
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    container: ubuntu:latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: install essential modules
+        run: |
+          apt-get update -y
+          apt-get upgrade -y
+          apt-get install -y sudo git
+      - name: Install zsh
+        run: ./zsh_installer.sh
+      - name: Install dotfiles
+        run: ./setup.sh
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install dotfiles
+        run: ./setup.sh true # MacOSをgithub workflowで使う場合lnコマンドが使えないのでtrueにする

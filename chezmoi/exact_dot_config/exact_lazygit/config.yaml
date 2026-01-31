@@ -1,0 +1,63 @@
+git:
+  parseEmoji: true
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never
+  branchLogCmd: "git log --graph --color=always --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' {{branchName}} --"
+  allBranchesLogCmds:
+    - git log --graph --color=always --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all
+gui:
+  showIcons: true
+os:
+  editPreset: "nvim"
+customCommands:
+  - key: "c"
+    context: "files"
+    description: "commit files with format"
+    prompts:
+      - type: "menu"
+        title: "What kind of commit type is it?"
+        key: "Type"
+        options:
+          - name: "fix"
+            description: "バグや不具合の修正"
+            value: "[FIX]"
+          - name: "feat"
+            description: "新機能の追加"
+            value: "[FEAT]"
+          - name: "docs"
+            description: "ドキュメントの更新や改善"
+            value: "[DOC]"
+          - name: "style"
+            description: "コードフォーマットの修正、UIのみの変更"
+            value: "[STYLE]"
+          - name: "refactor"
+            description: "パフォーマンスの改善なしのコードの改善"
+            value: "[REFACT]"
+          - name: "test"
+            description: "テストの追加や改善"
+            value: "[TEST]"
+          - name: "perf"
+            description: "パフォーマンスの改善"
+            value: "[PREF]"
+          - name: "chore"
+            description: "ビルドプロセスの変更や改善"
+            value: "[CHORE]"
+          - name: "wip"
+            description: "作業中"
+            value: "[WIP]"
+          - name: "del"
+            description: "コードの削除"
+            value: "[DEL]"
+          - name: "other"
+            description: "そのほかのcommit"
+            value: ""
+      - type: "input"
+        title: "Enter the Message"
+        key: "Message"
+        initialValue: ""
+      - type: "confirm"
+        title: "Commit"
+        body: "Commit with the message '{{.Form.Type}} {{.Form.Message}}'. Is this okay?"
+    command: 'bash -c ''type="{{.Form.Type}}"; message="{{.Form.Message}}"; commit_message="$type $message"; git commit -m "$commit_message"'''
+    loadingText: "Commiting..."

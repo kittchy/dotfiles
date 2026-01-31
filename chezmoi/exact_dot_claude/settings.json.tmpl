@@ -1,0 +1,84 @@
+{
+{{ if (eq .chezmoi.username "kiuchitakahiro") }}
+    "env": {},
+{{ else }}
+    "env": {
+        "AWS_REGION": "us-west-2",
+        "CLAUDE_CODE_USE_BEDROCK": "1",
+        "DISABLE_PROMPT_CACHING": "1",
+        "ANTHROPIC_MODEL": "global.anthropic.claude-sonnet-4-5-20250929-v1:0",
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": "global.anthropic.claude-opus-4-5-20251101-v1:0",
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": "global.anthropic.claude-sonnet-4-5-20250929-v1:0",
+        "ANTHROPIC_DEFAULT_HAIKU_MODEL": "global.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "8192"
+    },
+{{ end }}
+    "hooks": {
+        "Notification": [
+            {
+                "matcher": "",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "afplay /System/Library/Sounds/Sosumi.aiff"
+                    },
+                    {
+                        "type": "command",
+                        "command": "osascript -e 'display notification \"Claude Code is waiting for you.\" with title \"Claude Code\"'"
+                    }
+                ]
+            }
+        ],
+        "Stop": [
+            {
+                "matcher": "",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "afplay /System/Library/Sounds/Funk.aiff"
+                    },
+                    {
+                        "type": "command",
+                        "command": "osascript -e 'display notification \"Claude Code completed tasks.\" with title \"Claude Code\"'"
+                    }
+                ]
+            }
+        ]
+    },
+    "statusLine": {
+        "type": "command",
+        "command": "bunx -y ccstatusline@latest",
+        "padding": 0
+    },
+    "enabledPlugins": {
+        "pyright-lsp@claude-plugins-official": true,
+        "context7@claude-plugins-official": true,
+        "code-review@claude-plugins-official": true,
+        "feature-dev@claude-plugins-official": true,
+        "commit-commands@claude-plugins-official": true,
+        "playwright@claude-plugins-official": true,
+        "code-simplifier@claude-plugins-official": true
+    },
+    "spinnerVerbs": {
+        "mode": "replace",
+        "verbs": [
+            "ざわ・・ざわ・・",
+            "ざわざわ・・・",
+            "ざわ・・・"
+        ]
+    },
+    "language": "Japanese",
+    "alwaysThinkingEnabled": true,
+    "autoUpdatesChannel": "stable",
+    "permissions": {
+        "ask": [
+            "Bash(git commit:*)"
+        ],
+        "deny": [
+            "Read(*.env)",
+            "Bash(rm:*)",
+            "Bash(curl:*)"
+        ],
+        "defaultMode": "plan"
+    }
+}

@@ -1,0 +1,27 @@
+version: "3"
+
+tasks:
+  darwin-switch:
+    desc: Build and switch nix-darwin configuration
+    cmds:
+      - sudo nix run nix-darwin -- switch --flake ./nix#kiuchitakahirononotobukkukonpyuta
+
+  update:
+    desc: Update flake.lock
+    cmds:
+      - cd nix && nix flake update
+
+  check:
+    desc: Check flake configuration
+    cmds:
+      - cd nix && nix flake check
+
+  clean:
+    desc: Run garbage collection
+    cmds:
+      - sudo nix-collect-garbage -d
+
+  chezmoi_initialize:
+    desc: apply chezmoi
+    cmds:
+      - chezmoi --source $HOME/dotfiles init

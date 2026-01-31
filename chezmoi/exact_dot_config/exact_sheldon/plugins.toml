@@ -1,0 +1,60 @@
+shell = "zsh"
+
+
+[plugins.zsh-defer]
+github = "romkatv/zsh-defer"
+
+[templates]
+source = "{% for file in files %}source \"{{ file }}\"\n{% endfor %}"
+PATH = 'export PATH="{{ dir }}:$PATH"'
+path = 'path=( "{{ dir }}" $path )'
+fpath = 'fpath=( "{{ dir }}" $fpath )'
+defer = "{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}"
+
+[plugins.base16]
+github = "chriskempson/base16-shell"
+
+[plugins.compinit]
+inline = 'autoload -Uz compinit && zsh-defer compinit'
+
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+apply = ["defer"]
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+apply = ['defer']
+
+[plugins.aws_zsh_completer]
+remote = "https://raw.githubusercontent.com/aws/aws-cli/v2/bin/aws_zsh_completer.sh"
+apply = ["defer"]
+
+[plugins.powerlevel10k]
+github = "romkatv/powerlevel10k"
+apply = ["source"]
+
+# [plugins.starship]
+# inline = 'eval "$(starship init zsh)"'
+
+[plugins.autojump]
+github = 'wting/autojump'
+dir = 'bin'
+apply = ['PATH', 'defer']
+
+[plugins.zsh-syntax-highlighting]
+github = 'zsh-users/zsh-syntax-highlighting'
+apply = ["defer"]
+
+# [plugins.zsh-addr]
+# github = 'olets/zsh-abbr'
+# apply = ["defer"]
+
+[plugins.dotfiles-defers]
+local = "~/.config/zsh/defer"
+use = ["*.zsh"]
+apply = ["defer"]
+
+[plugins.dotfiles-sync]
+local = "~/.config/zsh/sync"
+use = ["*.zsh"]
+apply = ["source"]
