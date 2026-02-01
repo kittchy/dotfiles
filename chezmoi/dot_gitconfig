@@ -1,0 +1,39 @@
+[user]
+	  email = takahiro.kinouchi@mixi.co.jp
+	  name = Takahiro Kinouchi
+[alias]
+	  delete-merged-branch = "!f () { git branch --merged|egrep -v '\\*|develop|master|main'|xargs git branch -d; };f"
+    new = "!f(){ git ch -b feature/${1};};f"
+    co = "!f(){ git commit -m \"$(cat ~/.gitemoji | fzf | sed \"s/ - :.*//g\")${1}\";};f"
+    pr = "!f() { echo PR Url: $(git remote show -n origin | grep \"Push  URL\" | sed \"s/.*URL: git@//g\" | sed \"s/\\.git//g\" | sed \"s/:/\\//\")/compare/develop...$(git rev-parse --abbrev-ref HEAD); }; f"
+    ch = !git checkout
+    amend = !git commit --amend
+    cd = "!f(){ git ch $(git branch | sed \"s/* /  /g\" | fzf); };f"
+    save = !git stash save
+    load = "!f() { git stash apply --index $(git stash list | fzf | sed 's/stash@{//g' | sed \"s/}.*//g\"); }; f"
+    aicommit = "!f() { COMMITMSG=$(claude -p 'Generate ONLY a one-line Git commit message in English, using imperative mood, summarizing what was changed and why, based strictly on the contents of `git diff --cached`. Do not add explanation or a body. Output only the commit summary line.'); git commit -m \"$COMMITMSG\" -e; }; f"
+
+[push]
+	  autoSetupRemote = true
+[commit]
+	  verbose = true
+[color]
+	  ui = auto
+[core]
+	  editor = nvim
+[fetch]
+	  prune = true
+[pull]
+	  ff = only
+	  autostash = true
+	rebase = true
+[rebase]
+	  autostash = true
+	  autosquash = true
+[credential]
+	helper = store
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

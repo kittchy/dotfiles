@@ -1,0 +1,12 @@
+{
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "context7",
+    "memory"
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(git rev-parse:*)"
+    ]
+  }
+}
