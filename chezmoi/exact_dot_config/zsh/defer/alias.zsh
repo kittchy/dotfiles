@@ -187,6 +187,38 @@ alias analyze_json='analyze_json_func'
 # # claude
 alias claude="SHELL=/bin/sh claude"
 
+# GitHub PR コメント表示
+function ghpr-show-pr-comments-func() {
+    local PR_NUMBER="$1"
+
+    # PR番号が指定されていない場合は現在のブランチのPRを取得
+    if [ -z "$PR_NUMBER" ]; then
+        PR_NUMBER=$(gh pr view --json number -q .number 2>/dev/null)
+        if [ $? -ne 0 ] || [ -z "$PR_NUMBER" ]; then
+            echo "❌ エラー: PR番号を指定するか、PRに関連付けられたブランチで実行してください。"
+            echo "使用方法: ghpr-show-pr-comments [PR番号]"
+            return 1
+        fi
+    fi
+
+    gh api "repos/:owner/:repo/pulls/${PR_NUMBER}/comments" 2>&1 \
+        | tr -d '\000-\011\013-\037' \
+        | jq -r '
+            group_by(if .in_reply_to_id then .in_reply_to_id else .id end) |
+            map({
+                file: .[0].path,
+                line: .[0].line,
+                comments: . | sort_by(.created_at)
+            }) |
+            sort_by(.file, .line) |
+            .[] |
+            "📁 \(.file):\(.line)",
+            (.comments[] | "  💬 \(.user.login): \(.body[0:300])"),
+            "---"
+        '
+}
+alias ghpr-show-pr-comments='ghpr-show-pr-comments-func'
+
 # 遊び
 alias aa="asciiquarium"
 alias clock="tty-clock -sc"

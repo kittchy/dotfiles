@@ -2,9 +2,7 @@
   description = "A flake to provision my environment";
 
   inputs = {
-    nixpkgs = {
-      url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    };
+    nixpkgs = { url = "github:nixos/nixpkgs?ref=nixos-unstable"; };
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -17,13 +15,7 @@
     };
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      home-manager,
-      nix-darwin,
-    }:
+  outputs = { self, nixpkgs, home-manager, nix-darwin, }:
 
     let
       # ========================================
@@ -53,7 +45,7 @@
           homeDirectory = homedir;
           packages = [
             # Nix tools
-            pkgs.nixfmt-classic
+            pkgs.nixfmt-rfc-style
             pkgs.statix
 
             # Shell tools
@@ -78,9 +70,23 @@
             pkgs.git
             pkgs.gh
             pkgs.lazygit
-            pkgs.tmux
             pkgs.neovim
             pkgs.chezmoi
+            pkgs.sox
+            pkgs.tetris
+            pkgs.zellij
+            pkgs.pv
+            pkgs.duf
+            pkgs.pigz
+            pkgs.yazi
+            pkgs.zlib
+            pkgs.watch
+
+            # web engine
+            pkgs.hugo
+
+            # GUI tools
+            pkgs.wezterm
           ];
         };
 
@@ -90,8 +96,7 @@
         };
       };
 
-    in
-    {
+    in {
       # ========================================
       # macOS (nix-darwin) Configuration
       # ========================================
@@ -109,9 +114,7 @@
                 primaryUser = darwinUsername;
               };
 
-              users.users."${darwinUsername}" = {
-                home = darwinHomedir;
-              };
+              users.users."${darwinUsername}" = { home = darwinHomedir; };
 
               homebrew = {
                 enable = true;
@@ -127,17 +130,13 @@
                   "docker"
                   "docker-compose"
                   "docker-credential-helper"
-                  "duf"
-                  "ffind"
                   "ffmpeg"
-                  "fish"
                   "gcc"
                   "gemini-cli"
                   "ghostscript"
                   "git-secrets"
                   "go-task/tap/go-task"
                   "hashicorp/tap/terraform"
-                  "hugo"
                   "imagemagick"
                   "k9s"
                   "kdoctor"
@@ -146,35 +145,17 @@
                   "lazydocker"
                   "libsixel"
                   "llvm"
-                  "mongocli"
-                  "mongodb-atlas-cli"
-                  "mongodb/brew/mongodb-community"
-                  "mongodb/brew/mongodb-community-shell"
-                  "neofetch"
                   "nload"
                   "nsnake"
-                  "nvm"
-                  "pigz"
-                  "pipx"
                   "pkgconf"
-                  "pv"
                   "qmk/qmk/qmk"
                   "samtay/tui/tetris"
                   "shellcheck"
-                  "sox"
                   "speedtest-cli"
                   "svg2png"
                   "switchaudio-osx"
                   "tnk-studio/tools/lazykube"
-                  "tty-clock"
-                  "twty"
-                  "watch"
                   "wireguard-tools"
-                  "yarn"
-                  "yazi"
-                  "youplot"
-                  "zellij"
-                  "zlib"
                 ];
                 casks = [
                   "1password"
@@ -185,7 +166,6 @@
                   "font-hack-nerd-font"
                   "font-hackgen"
                   "gcloud-cli"
-                  "ghostty"
                   "google-chrome"
                   "google-cloud-sdk"
                   "kdenlive"
@@ -195,11 +175,10 @@
                   "rancher"
                   "raycast"
                   "sf-symbols"
-                  "slack"
-                  "spotify"
                   "via"
                   "vpn-by-google-one"
-                  "wezterm"
+                  "spotify"
+                  "slack"
                 ];
               };
             }
@@ -208,7 +187,8 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                users."${darwinUsername}" = sharedHomeConfig darwinPkgs darwinUsername darwinHomedir;
+                users."${darwinUsername}" =
+                  sharedHomeConfig darwinPkgs darwinUsername darwinHomedir;
               };
             }
           ];
@@ -218,58 +198,23 @@
       # ========================================
       # Linux (Home Manager Standalone) Configuration
       # ========================================
+      # Linux (Home Manager Standalone) Configuration
+      # ========================================
       homeConfigurations = {
         "${linuxUsername}" = home-manager.lib.homeManagerConfiguration {
           pkgs = linuxPkgs;
 
           modules = [
+            # Shared configuration (packages, zsh, etc.)
+            (sharedHomeConfig linuxPkgs linuxUsername linuxHomedir)
+
+            # Linux-specific additions
             {
-              home = {
-                stateVersion = "25.05";
-                username = linuxUsername;
-                homeDirectory = linuxHomedir;
-                packages = [
-                  # Nix tools
-                  linuxPkgs.nixfmt-classic
-                  linuxPkgs.statix
+              home.packages = [
+                linuxPkgs.xclip # Clipboard tool for X11
+              ];
 
-                  # Shell tools
-                  linuxPkgs.mise
-                  linuxPkgs.sheldon
-                  linuxPkgs.starship
-
-                  # Rust toolchain
-                  linuxPkgs.cargo
-                  linuxPkgs.rustc
-                  linuxPkgs.rust-analyzer
-                  linuxPkgs.clippy
-
-                  # CLI tools
-                  linuxPkgs.fzf
-                  linuxPkgs.fd
-                  linuxPkgs.ripgrep
-                  linuxPkgs.jq
-                  linuxPkgs.htop
-                  linuxPkgs.tree
-                  linuxPkgs.wget
-                  linuxPkgs.git
-                  linuxPkgs.gh
-                  linuxPkgs.lazygit
-                  linuxPkgs.tmux
-                  linuxPkgs.neovim
-                  linuxPkgs.chezmoi
-
-                  # Linux-only tools
-                  linuxPkgs.xclip
-                ];
-              };
-
-              programs.zsh = {
-                enable = true;
-                initExtra = builtins.readFile ./init.zsh;
-              };
-
-              # Required for standalone home-manager
+              # Required for standalone home-manager on Linux
               programs.home-manager.enable = true;
             }
           ];

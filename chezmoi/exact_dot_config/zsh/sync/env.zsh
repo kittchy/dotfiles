@@ -71,5 +71,8 @@ else
     touch $HOME/.zsh.extentions
 fi
 
+# editor
+EDITOR="nvim"
+
 # rancher desktop
 export PATH="$HOME/.rd/bin:$PATH"
