@@ -19,19 +19,24 @@
 
     let
       # ========================================
-      # macOS Configuration
+      # macOS (nix-darwin) Configuration
       # ========================================
-      darwinHostname = "kiuchitakahirononotobukkukonpyuta";
-      darwinUsername = "kiuchitakahiro";
-      darwinSystem = "aarch64-darwin";
+      # Get from environment variables (requires --impure flag)
+      darwinHostname = builtins.getEnv "NIX_DARWIN_HOSTNAME";
+      # Use SUDO_USER if available (when running with sudo), otherwise fall back to USER
+      darwinUsername =
+        let sudoUser = builtins.getEnv "SUDO_USER";
+        in if sudoUser != "" then sudoUser else builtins.getEnv "USER";
+      darwinSystem = builtins.currentSystem; # Auto-detect: aarch64-darwin or x86_64-darwin
       darwinHomedir = "/Users/${darwinUsername}";
       darwinPkgs = import nixpkgs { system = darwinSystem; };
 
       # ========================================
-      # Linux (Ubuntu) Configuration
+      # Ubuntu Configuration
       # ========================================
-      linuxUsername = "kittchy";
-      linuxSystem = "x86_64-linux";
+      # Get from environment variables (requires --impure flag)
+      linuxUsername = builtins.getEnv "USER";
+      linuxSystem = builtins.currentSystem; # Auto-detect: x86_64-linux or aarch64-linux
       linuxHomedir = "/home/${linuxUsername}";
       linuxPkgs = import nixpkgs { system = linuxSystem; };
 
@@ -114,6 +119,7 @@
                 primaryUser = darwinUsername;
               };
 
+              users.users.root = { home = "/var/root"; };
               users.users."${darwinUsername}" = { home = darwinHomedir; };
 
               homebrew = {
@@ -121,7 +127,6 @@
                 # macOS-only packages via Homebrew
                 brews = [
                   "awscli"
-                  "bakks/bakks/butterfish"
                   "bastet"
                   "cmake"
                   "cocoapods"
@@ -160,23 +165,18 @@
                 casks = [
                   "1password"
                   "1password-cli"
-                  "arc"
-                  "cursor"
                   "font-fira-code"
                   "font-hack-nerd-font"
                   "font-hackgen"
                   "gcloud-cli"
                   "google-chrome"
                   "google-cloud-sdk"
-                  "kdenlive"
-                  "kindle"
                   "meetingbar"
                   "postman"
                   "rancher"
                   "raycast"
                   "sf-symbols"
                   "via"
-                  "vpn-by-google-one"
                   "spotify"
                   "slack"
                 ];
@@ -195,8 +195,6 @@
         };
       };
 
-      # ========================================
-      # Linux (Home Manager Standalone) Configuration
       # ========================================
       # Linux (Home Manager Standalone) Configuration
       # ========================================
