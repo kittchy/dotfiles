@@ -5,13 +5,13 @@ tasks:
     desc: Build and switch nix-darwin configuration (macOS only)
     platforms: [darwin]
     cmds:
-      - sudo nix run nix-darwin -- switch --flake ./nix#kiuchitakahirononotobukkukonpyuta
+      - export NIX_DARWIN_HOSTNAME=$(hostname) && sudo -E nix run nix-darwin -- switch --flake ./nix#$(hostname) --impure
 
   home-switch:
     desc: Build and switch home-manager configuration (Linux only)
     platforms: [linux]
     cmds:
-      - nix run home-manager/master -- switch --flake ./nix#kittchy
+      - nix run home-manager/master -- switch --flake ./nix#$USER --impure
 
   switch:
     desc: Build and switch configuration (auto-detect platform)
