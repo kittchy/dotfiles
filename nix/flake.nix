@@ -86,6 +86,7 @@
             pkgs.yazi
             pkgs.zlib
             pkgs.watch
+            pkgs.marp-cli
 
             # web engine
             pkgs.hugo
