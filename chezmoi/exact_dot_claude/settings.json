@@ -1,9 +1,19 @@
 {
-    "model": "sonnet",
     "env": {
         "ANTHROPIC_MODEL": "claude-sonnet-4-6",
-        "DISABLE_PROMPT_CACHING": "1"
+        "DISABLE_PROMPT_CACHING": "0"
     },
+    "permissions": {
+        "deny": [
+            "Read(*.env)",
+            "Bash(rm:*)",
+            "Bash(curl:*)"
+        ],
+        "ask": [
+            "Bash(git commit:*)"
+        ]
+    },
+    "model": "sonnet",
     "hooks": {
         "Notification": [
             {
@@ -50,6 +60,7 @@
         "playwright@claude-plugins-official": true,
         "code-simplifier@claude-plugins-official": true
     },
+    "language": "Japanese",
     "spinnerVerbs": {
         "mode": "replace",
         "verbs": [
@@ -58,17 +69,6 @@
             "ざわ・・・"
         ]
     },
-    "language": "Japanese",
     "alwaysThinkingEnabled": true,
-    "autoUpdatesChannel": "stable",
-    "permissions": {
-        "ask": [
-            "Bash(git commit:*)"
-        ],
-        "deny": [
-            "Read(*.env)",
-            "Bash(rm:*)",
-            "Bash(curl:*)"
-        ]
-    }
+    "autoUpdatesChannel": "stable"
 }
