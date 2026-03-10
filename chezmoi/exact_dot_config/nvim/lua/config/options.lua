@@ -31,3 +31,4 @@ vim.g.ai_cmp = true
 
 -- Set default shell to zsh
 vim.opt.shell = "/bin/zsh"
+
