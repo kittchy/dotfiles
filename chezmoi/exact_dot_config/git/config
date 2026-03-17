@@ -5,17 +5,16 @@
     show = delta
 
 [delta]
-    plus-style = "syntax #012800"
-    minus-style = "syntax #340001"
-    syntax-theme = Monokai Extended
-    navigate = true
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
 
 [interactive]
     diffFilter = delta --color-only
 
 [user]
 	  email = takahiro.kinouchi@mixi.co.jp
-	  name = Takahiro Kinouchi
+    name = Takahiro Kinouchi
+
 [alias]
 	  delete-merged-branch = "!f () { git branch --merged|egrep -v '\\*|develop|master|main'|xargs git branch -d; };f"
     new = "!f(){ git ch -b feature/${1};};f"
@@ -29,26 +28,36 @@
     aicommit = "!f() { COMMITMSG=$(claude -p 'Generate ONLY a one-line Git commit message in English, using imperative mood, summarizing what was changed and why, based strictly on the contents of `git diff --cached`. Do not add explanation or a body. Output only the commit summary line.'); git commit -m \"$COMMITMSG\" -e; }; f"
 
 [push]
-	  autoSetupRemote = true
+    autoSetupRemote = true
+
 [commit]
-	  verbose = true
+    verbose = true
+
 [color]
-	  ui = auto
+    ui = auto
+
 [core]
-	  editor = nvim
+    editor = nvim
+    pager = delta
+
 [fetch]
-	  prune = true
+    prune = true
+
 [pull]
 	  ff = only
 	  autostash = true
-	rebase = true
+    rebase = true
+
 [rebase]
 	  autostash = true
-	  autosquash = true
+    autosquash = true
+
 [credential]
-	helper = store
+    helper = store
+
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+	  clean = git-lfs clean -- %f
+	  smudge = git-lfs smudge -- %f
+	  process = git-lfs filter-process
+    required = true
+
