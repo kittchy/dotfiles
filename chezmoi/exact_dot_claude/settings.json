@@ -5,15 +5,12 @@
     },
     "permissions": {
         "deny": [
-            "Read(*.env)",
-            "Bash(rm:*)",
-            "Bash(curl:*)"
+            "Read(*.env)"
         ],
         "ask": [
             "Bash(git commit:*)"
         ]
     },
-    "model": "sonnet",
     "hooks": {
         "Notification": [
             {

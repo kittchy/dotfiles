@@ -5,7 +5,7 @@ tasks:
     desc: Build and switch nix-darwin configuration (macOS only)
     platforms: [darwin]
     cmds:
-      - export NIX_DARWIN_HOSTNAME=$(hostname) && sudo -E nix run nix-darwin -- switch --flake ./nix#$(hostname) --impure
+      - export NIX_DARWIN_HOSTNAME=$(hostname -s) && sudo -E nix run nix-darwin -- switch --flake ./nix#$(hostname -s) --impure
 
   home-switch:
     desc: Build and switch home-manager configuration (Linux only)

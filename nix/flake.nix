@@ -2,7 +2,9 @@
   description = "A flake to provision my environment";
 
   inputs = {
-    nixpkgs = { url = "github:nixos/nixpkgs?ref=nixos-unstable"; };
+    nixpkgs = {
+      url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -15,7 +17,13 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-darwin, }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      nix-darwin,
+    }:
 
     let
       # ========================================
@@ -25,8 +33,10 @@
       darwinHostname = builtins.getEnv "NIX_DARWIN_HOSTNAME";
       # Use SUDO_USER if available (when running with sudo), otherwise fall back to USER
       darwinUsername =
-        let sudoUser = builtins.getEnv "SUDO_USER";
-        in if sudoUser != "" then sudoUser else builtins.getEnv "USER";
+        let
+          sudoUser = builtins.getEnv "SUDO_USER";
+        in
+        if sudoUser != "" then sudoUser else builtins.getEnv "USER";
       darwinSystem = builtins.currentSystem; # Auto-detect: aarch64-darwin or x86_64-darwin
       darwinHomedir = "/Users/${darwinUsername}";
       darwinPkgs = import nixpkgs { system = darwinSystem; };
@@ -50,7 +60,7 @@
           homeDirectory = homedir;
           packages = [
             # Nix tools
-            pkgs.nixfmt-rfc-style
+            pkgs.nixfmt
             pkgs.statix
 
             # Shell tools
@@ -98,11 +108,12 @@
 
         programs.zsh = {
           enable = true;
-          initExtra = builtins.readFile ./init.zsh;
+          initContent = builtins.readFile ./init.zsh;
         };
       };
 
-    in {
+    in
+    {
       # ========================================
       # macOS (nix-darwin) Configuration
       # ========================================
@@ -120,8 +131,12 @@
                 primaryUser = darwinUsername;
               };
 
-              users.users.root = { home = "/var/root"; };
-              users.users."${darwinUsername}" = { home = darwinHomedir; };
+              users.users.root = {
+                home = "/var/root";
+              };
+              users.users."${darwinUsername}" = {
+                home = darwinHomedir;
+              };
 
               homebrew = {
                 enable = true;
@@ -188,8 +203,7 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                users."${darwinUsername}" =
-                  sharedHomeConfig darwinPkgs darwinUsername darwinHomedir;
+                users."${darwinUsername}" = sharedHomeConfig darwinPkgs darwinUsername darwinHomedir;
               };
             }
           ];
