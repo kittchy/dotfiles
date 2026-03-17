@@ -60,7 +60,7 @@
           homeDirectory = homedir;
           packages = [
             # Nix tools
-            pkgs.nixfmt-rfc-style
+            pkgs.nixfmt
             pkgs.statix
 
             # Shell tools
@@ -108,7 +108,7 @@
 
         programs.zsh = {
           enable = true;
-          initExtra = builtins.readFile ./init.zsh;
+          initContent = builtins.readFile ./init.zsh;
         };
       };
 
