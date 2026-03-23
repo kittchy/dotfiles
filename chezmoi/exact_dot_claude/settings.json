@@ -1,14 +1,37 @@
 {
     "env": {
-        "ANTHROPIC_MODEL": "claude-sonnet-4-6",
         "DISABLE_PROMPT_CACHING": "0"
     },
     "permissions": {
+        "allow": [
+            "Bash(uv:*)",
+            "Bash(docker:*)",
+            "Bash(git status:*)",
+            "Bash(git diff:*)",
+            "Bash(git log:*)",
+            "Bash(git add:*)",
+            "Bash(git commit:*)",
+            "Bash(uv run cdk diff:*)",
+            "Bash(uv run cdk synth:*)",
+            "Bash(uv run pytest:*)",
+            "Bash(uv run python:*)",
+            "Bash(aws:*)",
+            "Bash(make:*)",
+            "Bash(jq:*)",
+            "Bash(git branch:*)",
+            "Bash(git stash:*)",
+            "Bash(git fetch:*)",
+            "Bash(git push:*)",
+            "Bash(grep:*)",
+            "Bash(ls:*)",
+            "mcp__aws-knowledge-mcp-server__aws___search_documentation",
+            "Skill(code-review)"
+        ],
         "deny": [
             "Read(*.env)"
         ],
         "ask": [
-            "Bash(git commit:*)"
+            "Bash(uv run cdk deploy:*)"
         ]
     },
     "hooks": {
@@ -55,7 +78,9 @@
         "feature-dev@claude-plugins-official": true,
         "commit-commands@claude-plugins-official": true,
         "playwright@claude-plugins-official": true,
-        "code-simplifier@claude-plugins-official": true
+        "code-simplifier@claude-plugins-official": true,
+        "example-skills@anthropic-agent-skills": true,
+        "document-skills@anthropic-agent-skills": true
     },
     "language": "Japanese",
     "spinnerVerbs": {
@@ -67,5 +92,6 @@
         ]
     },
     "alwaysThinkingEnabled": true,
-    "autoUpdatesChannel": "stable"
+    "autoUpdatesChannel": "stable",
+    "voiceEnabled": true
 }

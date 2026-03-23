@@ -32,6 +32,7 @@ local config = {
 		inactive_titlebar_bg = "none",
 		active_titlebar_bg = "none",
 	},
+	use_ime = true,
 }
 
 -- key bindings
