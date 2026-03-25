@@ -144,7 +144,7 @@ setopt noflowcontrol
 bindkey '^q' fzf-cdr
 
 ## zellij
-alias zj="zellij -l welcome"
+alias zj="zellij"
 alias zja="zellij attach"
 alias tmux="echo tmuxよりzellijを使うようにしましょう。zjにエイリアスをはってます。"
 
