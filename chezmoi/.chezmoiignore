@@ -1,7 +1,6 @@
 ホワイトリストで管理すること
 
 .claude/*
-!.claude/.credentials.json
 !.claude/CLAUDE.md
 !.claude/agents
 !.claude/settings.json
