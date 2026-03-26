@@ -9,15 +9,11 @@
 .config/*
 !.config/ccstatusline
 !.config/fastfetch
-!.config/gcloud
-!.config/gh
 !.config/git
 !.config/lazygit
 !.config/mise
 !.config/nvim
-!.config/github-copilot
 !.config/htop
-!.config/raycast
 !.config/sheldon
 !.config/wezterm
 !.config/zellij

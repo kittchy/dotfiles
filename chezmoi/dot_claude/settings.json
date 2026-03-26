@@ -1,0 +1,98 @@
+{
+    "env": {
+        "DISABLE_PROMPT_CACHING": "0",
+        "ENABLE_LSP_TOOL": "1"
+    },
+    "permissions": {
+        "allow": [
+            "Bash(uv:*)",
+            "Bash(docker:*)",
+            "Bash(git:*)",
+            "Bash(uv run cdk diff:*)",
+            "Bash(uv run cdk synth:*)",
+            "Bash(uv run pytest:*)",
+            "Bash(uv run python:*)",
+            "Bash(aws:*)",
+            "Bash(make:*)",
+            "Bash(jq:*)",
+            "Bash(grep:*)",
+            "Bash(ls:*)",
+            "mcp__aws-knowledge-mcp-server__aws___search_documentation",
+            "Skill(code-review)"
+        ],
+        "deny": [
+            "Read(*.env)"
+        ],
+        "ask": [
+            "Bash(uv run cdk deploy:*)"
+        ]
+    },
+    "hooks": {
+        "Notification": [
+            {
+                "matcher": "",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "afplay /System/Library/Sounds/Sosumi.aiff"
+                    },
+                    {
+                        "type": "command",
+                        "command": "osascript -e 'display notification \"Claude Code is waiting for you.\" with title \"Claude Code\"'"
+                    }
+                ]
+            }
+        ],
+        "Stop": [
+            {
+                "matcher": "",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "afplay /System/Library/Sounds/Funk.aiff"
+                    },
+                    {
+                        "type": "command",
+                        "command": "osascript -e 'display notification \"Claude Code completed tasks.\" with title \"Claude Code\"'"
+                    }
+                ]
+            }
+        ]
+    },
+    "statusLine": {
+        "type": "command",
+        "command": "bunx -y ccstatusline@latest",
+        "padding": 0
+    },
+    "enabledPlugins": {
+        "pyright-lsp@claude-plugins-official": true,
+        "context7@claude-plugins-official": true,
+        "code-review@claude-plugins-official": true,
+        "feature-dev@claude-plugins-official": true,
+        "commit-commands@claude-plugins-official": true,
+        "code-simplifier@claude-plugins-official": true,
+        "example-skills@anthropic-agent-skills": true,
+        "document-skills@anthropic-agent-skills": true,
+        "ruby-lsp@claude-plugins-official": true
+    },
+    "extraKnownMarketplaces": {
+        "claude-plugins-official": {
+            "source": {
+                "source": "github",
+                "repo": "anthropics/claude-plugins-official"
+            }
+        }
+    },
+    "language": "Japanese",
+    "spinnerVerbs": {
+        "mode": "replace",
+        "verbs": [
+            "ざわ・・ざわ・・",
+            "ざわざわ・・・",
+            "ざわ・・・"
+        ]
+    },
+    "alwaysThinkingEnabled": true,
+    "autoUpdatesChannel": "stable",
+    "voiceEnabled": true
+}
