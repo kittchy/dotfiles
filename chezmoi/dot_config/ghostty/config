@@ -6,6 +6,6 @@ font-family = HackGen Console
 font-size = 16
 
 # Window
-background-opacity = 0.2
+background-opacity = 0.4
 window-decoration = true
 macos-titlebar-style = native
