@@ -1,5 +1,6 @@
 ---
 name: add-commit
+model: sonnet
 allowed-tools: Bash(git:*)
 description: Gitで変更をステージング（add）してコミットする。「コミットして」「変更をコミット」「add-commit」「/add-commit」など、ユーザーがGitのコミット操作を求めた場合に使用する。変更内容の確認からステージング、コミットメッセージ作成まで一連の流れを処理する。
 ---

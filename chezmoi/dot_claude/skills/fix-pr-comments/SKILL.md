@@ -1,5 +1,6 @@
 ---
 name: fix-pr-comments
+model: sonnet
 allowed-tools: Read, Glob, Grep, AskUserQuestion, Edit, TaskCreate, TaskUpdate, TaskList, Bash
 description: Fetch PR review comments, analyze them, and address each review point systematically
 ---

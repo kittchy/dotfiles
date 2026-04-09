@@ -1,4 +1,5 @@
 ---
+model: sonnet
 allowed-tools: Bash(gh:*), Bash(git:*)
 description: PRの説明を生成し、GitHubで自動的にプルリクエストを作成
 ---

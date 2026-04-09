@@ -87,14 +87,6 @@
         }
     },
     "language": "Japanese",
-    "spinnerVerbs": {
-        "mode": "replace",
-        "verbs": [
-            "ざわ・・ざわ・・",
-            "ざわざわ・・・",
-            "ざわ・・・"
-        ]
-    },
     "alwaysThinkingEnabled": true,
     "autoUpdatesChannel": "latest",
     "voiceEnabled": true
