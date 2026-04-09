@@ -15,6 +15,7 @@
 !.config/nvim
 !.config/htop
 !.config/sheldon
+!.config/ghostty
 !.config/wezterm
 !.config/zellij
 !.config/zsh
