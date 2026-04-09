@@ -1,0 +1,11 @@
+# Theme
+theme = TokyoNight
+
+# Font
+font-family = HackGen Console
+font-size = 16
+
+# Window
+background-opacity = 0.2
+window-decoration = true
+macos-titlebar-style = native
