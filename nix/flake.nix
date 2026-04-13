@@ -39,7 +39,14 @@
         if sudoUser != "" then sudoUser else builtins.getEnv "USER";
       darwinSystem = builtins.currentSystem; # Auto-detect: aarch64-darwin or x86_64-darwin
       darwinHomedir = "/Users/${darwinUsername}";
-      darwinPkgs = import nixpkgs { system = darwinSystem; };
+      darwinPkgs = import nixpkgs {
+        system = darwinSystem;
+        config.allowUnfreePredicate =
+          pkg:
+          builtins.elem (nixpkgs.lib.getName pkg) [
+            "github-copilot-cli"
+          ];
+      };
 
       # ========================================
       # Ubuntu Configuration
@@ -48,7 +55,14 @@
       linuxUsername = builtins.getEnv "USER";
       linuxSystem = builtins.currentSystem; # Auto-detect: x86_64-linux or aarch64-linux
       linuxHomedir = "/home/${linuxUsername}";
-      linuxPkgs = import nixpkgs { system = linuxSystem; };
+      linuxPkgs = import nixpkgs {
+        system = linuxSystem;
+        config.allowUnfreePredicate =
+          pkg:
+          builtins.elem (nixpkgs.lib.getName pkg) [
+            "github-copilot-cli"
+          ];
+      };
 
       # ========================================
       # Shared Home Manager Configuration
@@ -97,6 +111,7 @@
             pkgs.zlib
             pkgs.watch
             pkgs.marp-cli
+            pkgs.github-copilot-cli
 
             # web engine
             pkgs.hugo
