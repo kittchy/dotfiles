@@ -16,6 +16,7 @@
 !.config/htop
 !.config/sheldon
 !.config/ghostty
+!.config/cmux
 !.config/wezterm
 !.config/zellij
 !.config/zsh

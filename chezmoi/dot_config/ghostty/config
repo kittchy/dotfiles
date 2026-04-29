@@ -1,11 +1,56 @@
-# Theme
+# --- テーマ・外観 ---
+# Vercel: ダークベースにクリーンなコントラスト
 theme = TokyoNight
+# 不透明度（1.0 = 完全不透明、下げると半透明）
+background-opacity = 0.8
 
-# Font
-font-family = HackGen Console
-font-size = 16
+# --- フォント ---
+# Fira Code: プログラミング向けリガチャ対応等幅フォント
+font-family = Fira Code
+font-size = 14
+font-style = Regular
+# コンテキスト依存の代替字形（contextual alternates）
+font-feature = +calt
+# 標準リガチャ（!=, =>, -> 等を結合表示）
+font-feature = +liga
 
-# Window
-background-opacity = 0.4
+# --- カーソル ---
+# 視認性の高い赤系カーソル + ブリンク
+cursor-color = #cccccc
+cursor-style = block
+cursor-style-blink = true
+
+# --- ウィンドウ ---
+# macOS ネイティブのタイトルバーを透過表示
 window-decoration = true
-macos-titlebar-style = native
+macos-titlebar-style = transparent
+# 内側パディングで余白を確保し、端色をコンテンツと揃える
+window-padding-x = 25
+window-padding-y = 25
+window-padding-color = extend
+# 初期サイズ（桁 x 行）
+window-width = 140
+window-height = 40
+# セッション間でウィンドウ位置・サイズを保持
+window-save-state = always
+# 新規ウィンドウ/タブで現在のディレクトリを引き継ぐ
+window-inherit-working-directory = true
+
+# --- クリップボード ---
+# アプリからのクリップボード読み書きを許可
+clipboard-read = allow
+clipboard-write = allow
+# テキスト選択時に自動でクリップボードへコピー
+copy-on-select = clipboard
+
+# --- アニメーション ---
+# クイックターミナル（ドロップダウン）の表示アニメーション時間
+quick-terminal-animation-duration = 0.3
+
+# --- アップデート ---
+# 新バージョンを自動ダウンロード（インストールは手動）
+auto-update = download
+
+# --- キーバインド ---
+# Shift+Enter でエスケープシーケンス付き改行を送信（REPLやエディタ向け）
+keybind = shift+enter=text:\x1b\r
